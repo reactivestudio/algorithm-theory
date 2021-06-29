@@ -1,0 +1,46 @@
+
+version: '3.8'
+
+networks:
+  default:
+    external:
+      name: dev
+
+services:
+  nginx:
+    restart: always
+    hostname: theory-nginx
+    image: nginx:latest
+    ports:
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
+    networks:
+      default:
+        aliases:
+          - theory.dev.local
+          - theory
+    volumes:
+      - ./docker/nginx/conf.d/app.conf:/etc/nginx/conf.d/app.conf
+      - ".:/usr/local/app"
+    depends_on:
+      - app
+
+  app:
+    restart: always
+    hostname: theory-fpm
+    user: "${UID:-1000}:${UID:-1000}" # dev
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.0}
+    environment:
+      # Note: this is a path in the container, not on the host.
+      APP_CACHE_DIR: /tmp/app-cache
+      COMPOSER_MEMORY_LIMIT: -1
+    networks:
+      default:
+        aliases:
+          - theory-fpm
+    volumes:
+      - ".:/usr/local/app"
