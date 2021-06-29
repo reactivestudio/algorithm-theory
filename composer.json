@@ -1,0 +1,30 @@
+{
+    "name": "reactivestudio/algorithm-theory",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Dmitriy Bushin",
+            "email": "dima.bushin@gmail.com"
+        }
+    ],
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Theory\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Theory\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "kint-php/kint": "^3.3"
+    }
+}
